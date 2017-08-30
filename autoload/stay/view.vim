@@ -79,7 +79,7 @@ function! stay#view#load(winid) abort
     let l:pattern = s:viewdir.path.'*'.fnamemodify(bufname('%'), ':t').'*'
     execute 'autocmd SourcePre' l:pattern
     \ 'let b:stay_loaded_view = expand(''<sfile>'') | autocmd! SourcePre' l:pattern
-    silent loadview
+    silent! loadview
     let l:did_load_view = exists('b:stay_loaded_view')
 
     " fire SessionLoadPost in a more targeted way
@@ -107,7 +107,7 @@ function! stay#view#load(winid) abort
     return -1
   finally
     " restore stale b:stay_loaded_view for API usage
-    if l:did_load_view isnot 1 && exists('l:stay_loaded_view')
+    if get(l:, 'did_load_view', 0) isnot 1 && exists('l:stay_loaded_view')
       let b:stay_loaded_view = l:stay_loaded_view
     endif
     let &eventignore = l:eventignore
